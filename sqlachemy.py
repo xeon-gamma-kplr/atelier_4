@@ -45,6 +45,44 @@ result_set = conn.execute(query)
 df = pd.DataFrame(result_set.fetchall(),columns=result_set.keys())
 df
 
+# TO DO : Ecrire une requête pour extraire tous les étudiants de la classe 'Four'
+result_set = conn.execute(text("SELECT * FROM student WHERE class = 'Four'"))
+# Afficher les résultats
+for row in result_set:
+    print(row)
+     
+     
+# TO DO : Sélectionner les enregistrements en fonction d'une classe particulière
+q="SELECT * FROM student WHERE class = 'Five'"
+my_cursor=conn.execute(text(q)) 
+data_row=my_cursor.fetchall()
+# TO DO : afficher le type de données renvoyé et le nombre d'enregistrements
+print(type(data_row))
+print(len(data_row))
+     
+
+# TO DO : sélectionner un enregistrement de la table 'student' dans la base de données où la colonne ID est égale à 8
+q = "SELECT * FROM student WHERE ID = 8"
+# Cette ligne exécute la requête et renvoie un objet curseur
+my_cursor = conn.execute(text(q))
+data_row = my_cursor.fetchone()
+# TO DO Cette ligne affiche les valeurs de la colonne ID, de la colonne Name et de la colonne Mark du tuple extrait précédemment
+print(data_row[0], data_row[1], data_row[3])
+     
+
+# TO DO : sélectionner les 10 premiers enregistrements de la table 'student' dans la base de données
+q = "SELECT * FROM student LIMIT 10"
+# Cette ligne exécute la requête et renvoie un objet curseur
+my_cursor = conn.execute(text(q))
+# Cette ligne extrait toutes les lignes de résultat du curseur sous forme de liste de tuples
+data_row = my_cursor.fetchall()
+# TO DO afficher le type de l'objet retourné (dans ce cas, une liste de tuples)
+print(type(data_row))
+# TO DO affiche le nombre d'enregistrements dans la liste
+print(len(data_row))
+# Cette boucle parcourt la liste d'enregistrements et affiche chaque tuple
+for row in data_row:
+    print(row)
 
 # impression des enregistrements à l'aide de la requête WHERE, requête paramétrée
 my_data = {'class_name': 'Four'}
