@@ -9,7 +9,7 @@ Original file is located at
 
 from sqlalchemy import create_engine
 from sqlalchemy import text
-my_conn = create_engine("sqlite:////content/my_db.db")
+my_conn = create_engine("sqlite:///my_db.db")
 
 conn = my_conn.connect()
 
@@ -18,7 +18,7 @@ from sqlalchemy import create_engine, text
 import pandas as pd
 
 # Créer un engine pour une base de données SQLite située dans "/content/my_db.db"
-engine = create_engine("sqlite:////content/my_db.db")
+engine = create_engine("sqlite:///my_db.db")
 
 # Établir une connexion à la base de données
 conn = engine.connect()
