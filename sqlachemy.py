@@ -83,3 +83,150 @@ print(len(data_row))
 # Cette boucle parcourt la liste d'enregistrements et affiche chaque tuple
 for row in data_row:
     print(row)
+
+# impression des enregistrements à l'aide de la requête WHERE, requête paramétrée
+my_data = {'class_name': 'Four'}
+#TO DO : sélectionner toutes les colonnes 'id', 'name', 'class', 'mark' et 'sex' de la table 'student' où la valeur de la colonne 'class' est égale à la valeur du paramètre ':class_name'.
+q = "SELECT * FROM student WHERE class = :class_name "
+my_cursor = conn.execute(text(q), my_data)
+data_row = my_cursor.fetchall()
+for row in data_row:
+    print(row)
+
+# printing records using WHERE condition, parameterized query
+my_data = {"class1": "Four", "class2": "Three"}
+# TO DO : sélectionner l'ID, le nom, la classe, la note et le sexe des étudiants de la table "student" où la classe de l'étudiant correspond à la class1 ou à la class2.
+q = text("SELECT * FROM student WHERE class = :class1 OR class = :class2 ")
+my_cursor = conn.execute(q, my_data)
+data_row=my_cursor.fetchall()
+for row in data_row:
+  print(row)
+
+# getting record by using id 
+my_data = {'num':'8'}
+#TO DO : Sélectionner l'ID, le nom, la classe, la note et le sexe d'un étudiant spécifique de la table "student", où l'ID de l'étudiant correspond à 'num'.
+q="SELECT * FROM student WHERE id = :num"
+my_cursor=conn.execute(text(q),my_data)
+data_row=my_cursor.fetchall()
+for row in data_row:
+  print(row)
+
+my_data={'class1':'Four', 'mark':80}
+#sélectionne l'ID, le nom, la classe, la note et le sexe des étudiants où la classe de l'étudiant correspond à 'class1'et la note de l'étudiant est supérieure ou égale à 'mark'.
+q="SELECT * FROM student WHERE class = :class1 AND mark >= :mark "
+my_cursor = conn.execute(text(q), my_data)
+data_row = my_cursor.fetchall()
+for row in data_row:
+  print(row)
+
+num = input("Enter the student id: ")
+my_data = {'id':num}
+# TO DO : Sélectionner l'ID, le nom, la classe, la note et le sexe d'un étudiant spécifique de la table "student", où l'ID de l'étudiant correspond à 'id'.
+q = "SELECT * FROM student WHERE id = :id"
+my_cursor = conn.execute(text(q), my_data)
+data_row = my_cursor.fetchall() 
+if len(data_row) == 0:
+    print("No record found")
+else:
+    for row in data_row:
+        print(row)
+
+#Obtenir l'identifiant de l'enregistrement inséré
+my_data={'id':None,'Name':'Fifth Name','class':'Five','mark':75,'sex':'male'}
+#TO DO : Insérer une nouvelle ligne dans LA"student" avec des valeurs pour les colonnes "id", "Name", "class", "mark" et "sex". 
+my_query="INSERT INTO student (id, name, class, mark, sex) VALUES(:id,:Name,:class,:mark,:sex)"
+result=conn.execute(text(my_query),my_data)
+print(result.lastrowid)
+
+# ajouter plusieurs enregistrements à la table des étudiants,
+# c'est une liste avec chaque enregistrement comme tuple
+my_data=({'id':None,'Name':'Big John','class':'Four','mark':55,'sex':'female'},
+         {'id':None,'Name':'Ronald','class':'Six','mark':89,'sex':'female'},
+         {'id':None,'Name':'ONe more','class':'Six','mark':89,'sex':'female'})
+
+#TO DO : Insérer 3 ligneS dans La table "student" avec des valeurs pour les colonnes "id", "Name", "class", "mark" et "sex".
+my_query="INSERT INTO student (id, name, class, mark, sex) VALUES(:id,:Name,:class,:mark,:sex)"
+result=conn.execute(text(my_query),my_data)
+print(result.lastrowid)
+print(result.rowcount)
+
+from sqlalchemy import text
+
+try:
+    #TO DO : supprimer la table "student" de la base de données. 
+    conn.execute(text("DROP TABLE student"))
+    print("student table deleted")
+except SQLAlchemyError as e:
+    error = str(e)
+    print(error)
+
+
+    # creating student table 
+from sqlalchemy.exc import SQLAlchemyError
+try:
+    #TO DO : crée une table nommée "student" avec cinq colonnes: "id", "name", "class", "mark" et "sex". La colonne "id" est définie comme la clé primaire .
+    conn.execute(text('''
+    CREATE TABLE student(id INTEGER NOT NULL,name VARCHAR,class VARCHAR,mark INTEGER,sex VARCHAR, PRIMARY KEY (id))'''))
+    
+    print("Student Table created successfully")
+except SQLAlchemyError as e:
+  #print(e)
+  error ="error : "+ str(e.__dict__['orig'])
+  print(error)
+
+#ajouter des enregistrements à la table des étudiants
+r_set=conn.execute(text('''INSERT INTO `student`
+(`id`, `name`, `class`, `mark`, `sex`) VALUES
+(1, 'John Deo', 'Four', 75, 'female'),
+(2, 'Max Ruin', 'Three', 85, 'male'),
+(3, 'Arnold', 'Three', 55, 'male'),
+(4, 'Krish Star', 'Four', 60, 'female'),
+(5, 'John Mike', 'Four', 60, 'female'),
+(6, 'Alex John', 'Four', 55, 'male'),
+(7, 'My John Rob', 'Five', 78, 'male'),
+(8, 'Asruid', 'Five', 85, 'male'),
+(9, 'Tes Qry', 'Six', 78, 'male'),
+(10, 'Big John', 'Four', 55, 'female'),
+(11, 'Ronald', 'Six', 89, 'female'),
+(12, 'Recky', 'Six', 94, 'female'),
+(13, 'Kty', 'Seven', 88, 'female'),
+(14, 'Bigy', 'Seven', 88, 'female'),
+(15, 'Tade Row', 'Four', 88, 'male'),
+(16, 'Gimmy', 'Four', 88, 'male'),
+(17, 'Tumyu', 'Six', 54, 'male'),
+(18, 'Honny', 'Five', 75, 'male'),
+(19, 'Tinny', 'Nine', 18, 'male'),
+(20, 'Jackly', 'Nine', 65, 'female'),
+(21, 'Babby John', 'Four', 69, 'female'),
+(22, 'Reggid', 'Seven', 55, 'female'),
+(23, 'Herod', 'Eight', 79, 'male'),
+(24, 'Tiddy Now', 'Seven', 78, 'male'),
+(25, 'Giff Tow', 'Seven', 88, 'male'),
+(26, 'Crelea', 'Seven', 79, 'male'),
+(27, 'Big Nose', 'Three', 81, 'female'),
+(28, 'Rojj Base', 'Seven', 86, 'female'),
+(29, 'Tess Played', 'Seven', 55, 'male'),
+(30, 'Reppy Red', 'Six', 79, 'female'),
+(31, 'Marry Toeey', 'Four', 88, 'male'),
+(32, 'Binn Rott', 'Seven', 90, 'female'),
+(33, 'Kenn Rein', 'Six', 96, 'female'),
+(34, 'Gain Toe', 'Seven', 69, 'male'),
+(35, 'Rows Noump', 'Six', 88, 'female');'''))
+
+from sqlalchemy.exc import SQLAlchemyError
+#TO DO : supprimer une ligne spécifique de la table "student" qui correspond à l'identifiant (id) 5.
+q="DELETE FROM student WHERE id= 3"
+try:
+  r_set=conn.execute(text(q))
+except SQLAlchemyError as e:
+  error=str(e.__dict__['orig'])
+  print(error)
+else:
+  print("No of records deleted : ",r_set.rowcount)
+
+conn.commit()
+
+import pandas as pd
+with engine.connect().execution_options(autocommit=True) as conn:
+    df = pd.read_sql(text("""SELECT * FROM student"""), con=conn)
+df
